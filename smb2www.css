@@ -1,0 +1,21 @@
+
+BODY  {
+  background-color: #E6EEF7;
+  font-family: Arial, Helvetica, sans-serif; font-size: 90%;
+  font-weight: normal; font-style: normal; font-variant: normal;
+  margin-left : 5;
+  margin-top : 5;
+    }
+h1    { font-size:110%;  color : #02578A; }
+h2    { font-size:100%;  color : #006666; }
+h3     { font-size:90% }
+
+A:link   { color: #006262;    font-weight:bold;}   /* unvisited link */
+A:visited   { color: #006262;   font-weight:bold;}    /* visited links */
+A:HOVER   { color: #00CCCC;   font-weight:bold;}    /* visited links */
+
+.style1 { background-color :  #E6EEF7; }
+.style2 { background-color : white;}
+.name   {}
+.size   {}
+.time   { font-size: 85%;}
