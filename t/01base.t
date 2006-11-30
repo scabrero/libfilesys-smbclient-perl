@@ -26,7 +26,8 @@ if (-e ".c") {
      username  => $l[3],
      password  => $l[4],
      workgroup => $l[2],
-     debug     =>  0
+     debug     =>  0,
+     flags     => SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON
     );
   my $smb = new Filesys::SmbClient(%param);
   my $server = "smb://$l[0]/$l[1]";
@@ -56,13 +57,13 @@ if (-e ".c") {
   ok($#tab != 0,"Stat file ") or diag("With $!");
 
   # Stat a non-existent file
-  @tab = $smb->stat("smb://jupiter/soft/lala");
+  @tab = $smb->stat("smb://jupidsdsdster/soft/lala");
   ok($#tab == 0,"Stat non-existent file") or diag("With $!");
 
   # Read a file
   my $buf;
   $fd = $smb->open("$server/toto/tata",'0666');
-  while (defined(my $l= $smb->read($fd,50))) {$buf.=$l; }
+  while (my $l= $smb->read($fd,50)) {$buf.=$l; }
   if (!$buf) { ok(0, "Read file"); }
   else {
     ok(length($buf) == length($buffer),"Read file")

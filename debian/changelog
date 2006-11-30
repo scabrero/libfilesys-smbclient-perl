@@ -1,3 +1,11 @@
+libfilesys-smbclient-perl (3.1-1) unstable; urgency=low
+
+  * New upstream release (Closes: #329542)
+  * Sorry, taking over the package due to its maintainer being MIA,
+    putting it in the Debian Perl Group's loving hands
+
+ -- Gunnar Wolf <gwolf@debian.org>  Wed, 29 Nov 2006 19:13:55 -0600
+
 libfilesys-smbclient-perl (1.5-2) unstable; urgency=low
 
   * Updated 'priority' to extra: libsmbclient, on which this package

@@ -44,7 +44,7 @@ if (-e ".c") {
 
   # Create a file with open / tie
   local *FD;
-  tie(*FD, 'Filesys::SmbClient');
+  tie(*FD, 'Filesys::SmbClient', undef, undef, %param);
   ok(open(FD, ">$server/toto/tata"),
      "TIE: open to create a file")
     or diag("With $!");

@@ -8,3 +8,9 @@ void auth_fn(const char *server,
 	     char *workgroup, int wgmaxlen,
 	     char *username, int umaxlen,
 	     char *password, int pwmaxlen);
+
+void ask_auth_fn(const char *server, 
+	     const char *share,
+	     char *workgroup, int wgmaxlen,
+	     char *username, int umaxlen,
+	     char *password, int pwmaxlen);
