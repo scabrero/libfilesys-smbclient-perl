@@ -1,0 +1,32 @@
+libfilesys-smbclient-perl (1.5-2) unstable; urgency=low
+
+  * Updated 'priority' to extra: libsmbclient, on which this package
+    depends, is in the 'extra' group.
+  * Updated the 'copyright' file to state upstream's copyright and also
+    the copyright of the Debian packaging.
+
+ -- Gunnar Wolf <gwolf@debian.org>  Fri, 19 Dec 2003 11:50:50 -0600
+
+libfilesys-smbclient-perl (1.5-1) unstable; urgency=low
+
+  * New upstream release
+  * Update debian/watch to point to the cpan.org site
+  * Add a new fix-upstream target which resets the 'x' bit for the files
+    in the upstream distribution which are not supposed to have that bit
+    set. Also remove the (now redundant) fix to reset the 'x' bit for the
+    smb2www.css file. This is now done in debian/rules, so there won't be
+    any problems during the build process.
+  * Remove the reference to the /usr/share/perl5/ directory if it's empty
+    from the resulting .deb.
+
+ -- Amit Shah <amitshah@gmx.net>  Fri, 28 Nov 2003 15:07:37 +0530
+
+libfilesys-smbclient-perl (1.4-1) unstable; urgency=low
+
+  * Initial Release (closes: #218307)
+  * Remove all (unnecessary) prompts while building
+  * chmod -x all files other than ./configure and t/*.t
+  * Enable verbose mode if DH_VERBOSE is set
+  * Sponsored by Gunnar Wolf <gwolf@debian.org>
+
+ -- Gunnar Wolf <gwolf@debian.org>  Tue,  4 Nov 2003 11:43:46 -0600

@@ -1,0 +1,22 @@
+README for libfilesys-smbclient-perl for Debian
+
+The manual page for libfilesys-smbclient-perl can be accessed by
+running the following command:
+
+man Filesys::SmbClient.
+
+There are some test scripts in the
+/usr/share/doc/libfilesys-smbclient/examples/t directory. To run any
+of these test scripts, you'll need a file called ".c" in your current
+directory, with the following fields separated by tabs on a single
+line:
+
+<samba server>	<name of samba share>	<workgroup/domain>	<user>	<password>
+
+The examples/ directory also contains smb2www-2.cgi, a script you can
+use to browse shares, workgroups, read/write/remove directories,
+create/modify/remove files. You'll need the libcgi-perl and CGI::Carp
+packages to run this script. This script also shows you how to use
+this module effectively.
+
+ -- Amit Shah <amitshah@gmx.net>, Sat Nov  1 10:47:40 2003

@@ -1,0 +1,14 @@
+Source: libfilesys-smbclient-perl
+Section: perl
+Priority: extra
+Build-Depends: debhelper (>= 4), perl (>= 5.8.0-7), libsmbclient-dev
+Maintainer: Amit Shah <amitshah@gmx.net>
+Standards-Version: 3.6.1.0
+
+Package: libfilesys-smbclient-perl
+Architecture: any
+Depends: ${perl:Depends}, ${shlibs:Depends}
+Description:  perl interface to access Samba filesystem
+ This package provides the Filesys::SmbClient module. It provides
+ interface to the functions in libsmbclient.so. It has functions to
+ read/write/add/modify files/directories on Samba shares.

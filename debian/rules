@@ -1,0 +1,89 @@
+#!/usr/bin/make -f
+#-*- makefile -*-
+# Made with the aid of dh_make, by Craig Small
+# Sample debian/rules that uses debhelper. GNU copyright 1997 by Joey Hess.
+# Some lines taken from debmake, by Christoph Lameter.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PACKAGE=$(shell dh_listpackages)
+
+ifndef PERL
+PERL = /usr/bin/perl
+endif
+
+ifndef DESTDIR
+DESTDIR=..
+endif
+TMP     =`pwd`/debian/$(PACKAGE)
+
+OPTIMIZE = -O2 -Wall
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+OPTIMIZE += -g
+endif
+
+
+# Fix for the files which have the 'x' bit set in upstream
+fix-upstream:
+	chmod 0644 *
+	chmod 0744 configure
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	$(PERL) Makefile.PL INSTALLDIRS=vendor
+	$(MAKE) OPTIMIZE="$(OPTIMIZE)" LD_RUN_PATH=""
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	-$(MAKE) realclean
+	dh_clean
+
+install: fix-upstream
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	$(MAKE) install PREFIX=$(TMP)/usr
+
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs debian/README.Debian
+	dh_installexamples t/*.t smb2www-2.cgi smb2www.css
+
+	# Remove the reference to /usr/share/perl5/ directory, if it's empty.
+	# (Makefile.PL weirdness: it uses this directory, even if not needed.)
+	rmdir --ignore-fail-on-non-empty $(TMP)/usr/share/perl5/
+
+#	dh_installmenu
+#	dh_installinit
+#	dh_installcron
+#	dh_installman
+	dh_installchangelogs Changes
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_makeshlibs
+	dh_installdeb
+	dh_perl 
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb --destdir=$(DESTDIR)
+
+source diff:                                                                  
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

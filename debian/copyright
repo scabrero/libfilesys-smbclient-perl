@@ -1,0 +1,21 @@
+This is the debian package for the Filesys::SmbClient module.  It was
+created by Amit Shah <amitshah@gmx.net>.
+
+The debianizing of the package (which involves the stuff in the
+debian/ directory and additional patches to the upstream sources) is
+Copyright (C) 2003-4 Amit Shah <amitshah@gmx.net>.
+
+The sources were downloaded from
+http://search.cpan.org/CPAN/authors/id/A/AL/ALIAN/
+
+Upstream author: Alain Barbet <alian@alianwebserver.com>.
+
+Copyright:
+Copyright 2000 A.Barbet alian@alianwebserver.com.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+See /usr/share/common-licenses/GPL for a copy of the license.
