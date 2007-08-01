@@ -6,6 +6,7 @@ Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Uploaders: Gunnar Wolf <gwolf@debian.org>
 Standards-Version: 3.7.2.2
 XS-Vcs-Svn: svn://svn.debian.org/pkg-perl/trunk/libfilesys-smbclient-perl/
+XS-Vcs-Browser: http://svn.debian.org/wsvn/pkg-perl/trunk/libfilesys-smbclient-perl/
 
 Package: libfilesys-smbclient-perl
 Architecture: any
