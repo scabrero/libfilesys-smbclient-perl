@@ -18,6 +18,7 @@ libfilesys-smbclient-perl (3.1-2) UNRELEASED; urgency=low
     + when installing t/ as examples, keep the directory
   * Move changes to Makefile.PL into 10_Makefile.PL.patch
     + add quilt to build process
+  * chmod 0644 smb2www.css (thanks, lintian)
 
  -- gregor herrmann <gregor+debian@comodo.priv.at>  Tue, 09 Oct 2007 22:29:30 +0200
 
