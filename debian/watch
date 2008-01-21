@@ -1,2 +1,2 @@
-version=2
-http://www.cpan.org/modules/by-module/Filesys/Filesys-SmbClient-(.*)\.tar\.gz
+version=3
+http://search.cpan.org/dist/Filesys-SmbClient/   .+/Filesys-SmbClient-v?(\d[\d._]*)\.(?:tar\.gz|tar\.bz2|tgz|tbz|zip)

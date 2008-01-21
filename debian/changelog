@@ -1,9 +1,13 @@
 libfilesys-smbclient-perl (3.1-2) UNRELEASED; urgency=low
 
+  [ gregor herrmann ]
   * debian/control: Added: Vcs-Svn field (source stanza); Vcs-Browser
     field (source stanza); Homepage field (source stanza). Removed: XS-
     Vcs-Svn fields.
   * debian/rules: delete /usr/share/perl5 only if it exists.
+
+  [ Damyan Ivanov ]
+  * debian/watch: use dist-vased URL, better pattern
 
  -- gregor herrmann <gregor+debian@comodo.priv.at>  Tue, 09 Oct 2007 22:29:30 +0200
 
