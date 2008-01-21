@@ -11,6 +11,8 @@
 # always return the default without waiting for user input.
 export PERL_MM_USE_DEFAULT=1
 
+include /usr/share/quilt/quilt.make
+
 PACKAGE=$(shell dh_listpackages)
 
 ifndef PERL
@@ -30,14 +32,14 @@ endif
 
 
 build: build-stamp
-build-stamp:
+build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 	$(PERL) Makefile.PL INSTALLDIRS=vendor
 	$(MAKE) OPTIMIZE="$(CFLAGS)" LD_RUN_PATH=""
 	#$(MAKE) test # requires accass to a samba server
 	touch $@
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	dh_clean build-stamp install-stamp
@@ -69,6 +71,9 @@ binary-arch: build install
 	dh_testroot
 	dh_installdocs debian/README.Debian
 	dh_installexamples t smb2www-2.cgi smb2www.css
+
+	chmod 0644 $(TMP)/usr/share/doc/$(PACKAGE)/examples/smb2www.css
+
 	dh_installchangelogs Changes
 	dh_strip
 	dh_compress

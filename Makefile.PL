@@ -6,24 +6,20 @@ my ($define, $ccfl);
 ($^O =~ m/AIX/i) ? ($ccfl = '-qcpluscmt') : ($ccfl = '');
 
 # path libsmbclient.h
-#my $include = try_to_find("libsmbclient.h");
-#$include = prompt("Where can I find libsmbclient.h ?", $include);
-#warn_user("$include/libsmbclient.h") if (!-r "$include/libsmbclient.h");
-my $include = '/usr/include';
+my $include = try_to_find("libsmbclient.h");
+$include = prompt("Where can I find libsmbclient.h ?", $include);
+warn_user("$include/libsmbclient.h") if (!-r "$include/libsmbclient.h");
 
 # path libsmbclient.so
-#my $lib = try_to_find("libsmbclient.so");
-#$lib = prompt("Where can I find libsmbclient.so ?",$lib);
-#warn_user("libsmbclient.so") if (!-r "$lib/libsmbclient.so");
-my $lib = '/usr/lib';
+my $lib = try_to_find("libsmbclient.so");
+$lib = prompt("Where can I find libsmbclient.so ?",$lib);
+warn_user("libsmbclient.so") if (!-r "$lib/libsmbclient.so");
 
 # tests demande ?
-#my $ans = 
-#  prompt("Do you want make tests ?(you will be prompted for server / \n".
-#	   "worgroup / share / user / password to make read write access.",
-#	   "yes");
-my $ans = 'n';
-
+my $ans = 
+  prompt("Do you want make tests ?(you will be prompted for server / \n".
+	   "worgroup / share / user / password to make read write access.",
+	   "yes");
 if ($ans =~ /^y(es)?$/i) 
   {
     my $server = prompt("Server ?","localhost");
@@ -37,8 +33,7 @@ if ($ans =~ /^y(es)?$/i)
   }
 
 # Trace for debug
-#$ans = prompt("Compile module with trace to STDERR ?", "no");
-$ans = 'n';
+$ans = prompt("Compile module with trace to STDERR ?", "no");
 if ($ans =~ /^y(es)?$/i) { $define = "-DVERBOSE"; }
 
 # Create config.h for alloca via configure

@@ -16,6 +16,8 @@ libfilesys-smbclient-perl (3.1-2) UNRELEASED; urgency=low
     + remove commented-out dh_* calls; remove unused dh_link and dh_makeshlibs
       calls
     + when installing t/ as examples, keep the directory
+  * Move changes to Makefile.PL into 10_Makefile.PL.patch
+    + add quilt to build process
 
  -- gregor herrmann <gregor+debian@comodo.priv.at>  Tue, 09 Oct 2007 22:29:30 +0200
 

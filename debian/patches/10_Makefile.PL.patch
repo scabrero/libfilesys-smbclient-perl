@@ -1,0 +1,49 @@
+Index: libfilesys-smbclient-perl/Makefile.PL
+===================================================================
+--- libfilesys-smbclient-perl.orig/Makefile.PL	2008-01-21 14:02:51.000000000 +0200
++++ libfilesys-smbclient-perl/Makefile.PL	2008-01-21 14:03:34.000000000 +0200
+@@ -6,20 +6,24 @@
+ ($^O =~ m/AIX/i) ? ($ccfl = '-qcpluscmt') : ($ccfl = '');
+ 
+ # path libsmbclient.h
+-my $include = try_to_find("libsmbclient.h");
+-$include = prompt("Where can I find libsmbclient.h ?", $include);
+-warn_user("$include/libsmbclient.h") if (!-r "$include/libsmbclient.h");
++#my $include = try_to_find("libsmbclient.h");
++#$include = prompt("Where can I find libsmbclient.h ?", $include);
++#warn_user("$include/libsmbclient.h") if (!-r "$include/libsmbclient.h");
++my $include = '/usr/include';
+ 
+ # path libsmbclient.so
+-my $lib = try_to_find("libsmbclient.so");
+-$lib = prompt("Where can I find libsmbclient.so ?",$lib);
+-warn_user("libsmbclient.so") if (!-r "$lib/libsmbclient.so");
++#my $lib = try_to_find("libsmbclient.so");
++#$lib = prompt("Where can I find libsmbclient.so ?",$lib);
++#warn_user("libsmbclient.so") if (!-r "$lib/libsmbclient.so");
++my $lib = '/usr/lib';
+ 
+ # tests demande ?
+-my $ans = 
+-  prompt("Do you want make tests ?(you will be prompted for server / \n".
+-	   "worgroup / share / user / password to make read write access.",
+-	   "yes");
++#my $ans = 
++#  prompt("Do you want make tests ?(you will be prompted for server / \n".
++#	   "worgroup / share / user / password to make read write access.",
++#	   "yes");
++my $ans = 'n';
++
+ if ($ans =~ /^y(es)?$/i) 
+   {
+     my $server = prompt("Server ?","localhost");
+@@ -33,7 +37,8 @@
+   }
+ 
+ # Trace for debug
+-$ans = prompt("Compile module with trace to STDERR ?", "no");
++#$ans = prompt("Compile module with trace to STDERR ?", "no");
++$ans = 'n';
+ if ($ans =~ /^y(es)?$/i) { $define = "-DVERBOSE"; }
+ 
+ # Create config.h for alloca via configure
