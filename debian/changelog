@@ -8,6 +8,14 @@ libfilesys-smbclient-perl (3.1-2) UNRELEASED; urgency=low
 
   [ Damyan Ivanov ]
   * debian/watch: use dist-vased URL, better pattern
+  * debian/rules:
+    + move (still disabled) test suite in build-stamp target
+    + use "$@" when touching stamps
+    + remove *-stamp files before realclean
+    + fix install(-stamp) dependencies
+    + remove commendet-out dh_* calls; remove unused dh_link and dh_makeshlibs
+      calls
+    + when installing t/ as examples, keep the directory
 
  -- gregor herrmann <gregor+debian@comodo.priv.at>  Tue, 09 Oct 2007 22:29:30 +0200
 

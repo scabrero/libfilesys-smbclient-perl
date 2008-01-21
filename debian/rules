@@ -33,24 +33,23 @@ build: build-stamp
 build-stamp:
 	dh_testdir
 	$(PERL) Makefile.PL INSTALLDIRS=vendor
-	$(MAKE) OPTIMIZE="$(OPTIMIZE)" LD_RUN_PATH=""
-	touch build-stamp
+	$(MAKE) OPTIMIZE="$(CFLAGS)" LD_RUN_PATH=""
+	#$(MAKE) test # requires accass to a samba server
+	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp
-	[ ! -f Makefile ] || $(MAKE) realclean
 	dh_clean build-stamp install-stamp
+	[ ! -f Makefile ] || $(MAKE) realclean
 
-install: build install-stamp
-install-stamp:
+install: install-stamp
+install-stamp: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 
 	# Add commands to install the package into debian/$PACKAGE_NAME here
-	#TEST#
 	$(MAKE) install DESTDIR=$(TMP) PREFIX=/usr
 
 	# As this is a architecture dependent package, we are not
@@ -58,7 +57,7 @@ install-stamp:
 	# the dirs, we delete them from the deb:
 	[ ! -d $(TMP)/usr/share/perl5 ] || rmdir --ignore-fail-on-non-empty --parents --verbose $(TMP)/usr/share/perl5
 
-	touch install-stamp
+	touch $@
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -69,18 +68,13 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs debian/README.Debian
-	dh_installexamples t/*.t smb2www-2.cgi smb2www.css
-#	dh_installmenu
-#	dh_installcron
-#	dh_installman
+	dh_installexamples t smb2www-2.cgi smb2www.css
 	dh_installchangelogs Changes
-	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs
 	dh_installdeb
-	dh_perl 
+	dh_perl
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
