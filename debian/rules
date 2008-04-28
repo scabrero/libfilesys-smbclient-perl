@@ -43,7 +43,7 @@ clean: unpatch
 	dh_testdir
 	dh_testroot
 	dh_clean build-stamp install-stamp
-	[ ! -f Makefile ] || $(MAKE) realclean
+	[ ! -f Makefile ] || ( touch Makefile && $(MAKE) realclean )
 
 install: install-stamp
 install-stamp: build-stamp
