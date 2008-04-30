@@ -3,8 +3,10 @@ libfilesys-smbclient-perl (3.1-3) UNRELEASED; urgency=low
   * debian/rules: touch Makefile in clean target after unpatching
     Makefile.PL to prevent it from being re-built; allows building twice
     in a row.
+  * debian/copyright: point to author-independent URL of the upstream
+    source.
 
- -- gregor herrmann <gregoa@debian.org>  Mon, 28 Apr 2008 19:16:56 +0200
+ -- gregor herrmann <gregoa@debian.org>  Wed, 30 Apr 2008 23:32:44 +0200
 
 libfilesys-smbclient-perl (3.1-2) unstable; urgency=low
 

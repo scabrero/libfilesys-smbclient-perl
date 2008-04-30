@@ -6,7 +6,7 @@ debian/ directory and additional patches to the upstream sources) is
 Copyright (C) 2003-4 Amit Shah <amitshah@gmx.net>.
 
 The sources were downloaded from
-http://search.cpan.org/CPAN/authors/id/A/AL/ALIAN/
+http://search.cpan.org/dist/Filesys-SmbClient/
 
 Upstream author: Alain Barbet <alian@alianwebserver.com>.
 
