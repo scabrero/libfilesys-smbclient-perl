@@ -1,8 +1,6 @@
-Index: libfilesys-smbclient-perl/Makefile.PL
-===================================================================
---- libfilesys-smbclient-perl.orig/Makefile.PL	2008-01-21 14:02:51.000000000 +0200
-+++ libfilesys-smbclient-perl/Makefile.PL	2008-01-21 14:03:34.000000000 +0200
-@@ -6,20 +6,24 @@
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -6,20 +6,24 @@ my ($define, $ccfl);
  ($^O =~ m/AIX/i) ? ($ccfl = '-qcpluscmt') : ($ccfl = '');
  
  # path libsmbclient.h
@@ -37,7 +35,7 @@ Index: libfilesys-smbclient-perl/Makefile.PL
  if ($ans =~ /^y(es)?$/i) 
    {
      my $server = prompt("Server ?","localhost");
-@@ -33,7 +37,8 @@
+@@ -33,7 +37,8 @@ if ($ans =~ /^y(es)?$/i) 
    }
  
  # Trace for debug
