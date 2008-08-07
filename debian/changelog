@@ -1,3 +1,10 @@
+libfilesys-smbclient-perl (3.1-4) UNRELEASED; urgency=low
+
+  * Add debian/README.source to document quilt usage, as required by
+    Debian Policy since 3.8.0.
+
+ -- gregor herrmann <gregoa@debian.org>  Wed, 06 Aug 2008 21:33:39 -0300
+
 libfilesys-smbclient-perl (3.1-3) unstable; urgency=low
 
   * debian/rules: touch Makefile in clean target after unpatching
