@@ -12,7 +12,7 @@ Vcs-Browser: http://svn.debian.org/viewsvn/pkg-perl/trunk/libfilesys-smbclient-p
 
 Package: libfilesys-smbclient-perl
 Architecture: any
-Depends: ${perl:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${perl:Depends}, ${shlibs:Depends}
 Description:  perl interface to access Samba filesystem
  This package provides the Filesys::SmbClient module. It provides
  interface to the functions in libsmbclient.so. It has functions to

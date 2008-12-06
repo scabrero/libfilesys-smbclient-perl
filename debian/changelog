@@ -4,6 +4,7 @@ libfilesys-smbclient-perl (3.1-4) UNRELEASED; urgency=low
     Debian Policy since 3.8.0.
   * debian/control: Changed: Switched Vcs-Browser field to ViewSVN
     (source stanza).
+  * debian/control: Added: ${misc:Depends} to Depends: field.
 
  -- gregor herrmann <gregoa@debian.org>  Wed, 06 Aug 2008 21:33:39 -0300
 
