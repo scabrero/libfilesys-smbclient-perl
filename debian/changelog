@@ -1,10 +1,14 @@
 libfilesys-smbclient-perl (3.1-4) UNRELEASED; urgency=low
 
+  [ gregor herrmann ]
   * Add debian/README.source to document quilt usage, as required by
     Debian Policy since 3.8.0.
   * debian/control: Changed: Switched Vcs-Browser field to ViewSVN
     (source stanza).
   * debian/control: Added: ${misc:Depends} to Depends: field.
+
+  [ Nathan Handler ]
+  * debian/watch: Update to ignore development releases.
 
  -- gregor herrmann <gregoa@debian.org>  Wed, 06 Aug 2008 21:33:39 -0300
 
