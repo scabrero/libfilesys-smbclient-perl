@@ -37,7 +37,10 @@ $ans = prompt("Compile module with trace to STDERR ?", "no");
 if ($ans =~ /^y(es)?$/i) { $define = "-DVERBOSE"; }
 
 # Create config.h for alloca via configure
-system("./configure") == 0 or die "Can't run configure:$!\n";
+my $prefix = $include;
+$prefix=$1 = $1 if $include=~m!(.*)include$!;
+system("./configure --with-samba-prefix=$prefix") == 0
+  or die "Can't run configure:$!\n";
 
 # Create makefile
 WriteMakefile
@@ -86,16 +89,27 @@ EOF
 
 sub try_to_find {
   my $name = shift;
-  my @path;
-  if ($name=~m!\.h$!) {
-    @path = qw!/usr/include /usr/local/include /usr/local/samba/include /usr/local/samba3/include!;
-  }
-  else {
-    @path = qw!/usr/lib /usr/local/lib /usr/local/bin /usr/local/samba/bin /usr/local/samba3/lib!; 
-  }
-  print "-- Try to find $name in ", join(' ',@path),"\n";
+  my @path = find_path($name);
   foreach my $d (@path) {
-    print "-- I found $name in $d\n";
     if (-e "$d/$name") { return $d; }
   }
+}
+
+sub find_path {
+  my $ext = ($_[0]=~m!\.h$! ? "include" : "lib");
+  my $defaultsDir = { "/usr" => 1,
+		      "/usr/local" => 1,
+		      "/usr/local/samba" => 1,
+		      "/usr/local/samba3" => 1 };
+  my @pa = split(/:/, $ENV{PATH});
+  my @path;
+  foreach (@pa) {
+    s/bin//;
+    s!//!/!g;
+    s!/$!!g;
+    push(@path, $_."/$ext") if !$defaultsDir->{$_};
+  }
+  foreach (keys %$defaultsDir) { push(@path, $_."/$ext"); }
+  print "I search in: ",(join "\n", @path),"\n";
+  return @path;
 }

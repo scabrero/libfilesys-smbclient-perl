@@ -1,5 +1,20 @@
 Revision history for Perl extension Filesys::SmbClient.
 
+3.1  2006/09/07 17:15:00 alian
+ - fix rt#12221: compile error on Debian Sarge
+ - fix rt#18757: compile error with Gentoo Linux/samba 3.0.21b
+ - fix rt#13173: read method doesn't return undef when file reading is over
+ - fix bug in configure.in that never build config.h
+	
+3.0  2005/03/04 16:15:00 alian
+ - Update to samba3 API and use SMBCTXX
+ - Add set_flag method for samba 3.0.11
+ - Update smb2www-2.cgi to browse workgroup with smb://
+ - Return 0 not undef at end of file with read/READLINE
+  (tks to jonathan.segal at genizon.com for report).
+ - Fix whence bug in seek method (not used before)
+ - Add some tests for read and seek patched in this version
+
 1.5  2003/11/09 18:28:01  alian
  - Add a Copyright section
  - Correct a bug with samba3 (reported by dpavlin at rot13.org)

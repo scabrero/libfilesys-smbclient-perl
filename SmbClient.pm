@@ -2,31 +2,24 @@ package Filesys::SmbClient;
  
 # module Filesys::SmbClient : provide function to access Samba filesystem
 # with libsmclient.so
-# Copyright 2000 A.Barbet alian@alianwebserver.com.  All rights reserved.
+# Copyright 2000-2006 A.Barbet alian@alianwebserver.com.  All rights reserved.
 
 # $Log: SmbClient.pm,v $
+# Revision 3.1  2006/09/13 13:49:32  alian
+# release 3.1: fix for rt#12221 rt#18757 rt#13173 and bug in configure
+#
+# Revision 3.0  2005/03/04 16:15:00  alian
+# 3.0  2005/03/05 alian
+#  - Update to samba3 API and use SMBCTXX
+#  - Add set_flag method for samba 3.0.11
+#  - Update smb2www-2.cgi to browse workgroup with smb://
+#  - Return 0 not undef at end of file with read/READLINE
+#   (tks to jonathan.segal at genizon.com for report).
+#  - Fix whence bug in seek method (not used before)
+#  - Add some tests for read and seek patched in this version
+#
 # Revision 1.5  2003/11/09 18:28:01  alian
 # Add Copyright section
-#
-# Revision 1.4  2002/10/18 13:00:30  alian
-# Same as previous release. Restrict filehandle to 5.6 and later
-#
-# Revision 1.3  2002/10/17 18:21:05  alian
-# -Add tie method to play with filehandle like usually 
-# (tks to Bryan Castillo for idea)
-# - Update Pod documentation
-#
-# Revision 1.2  2002/08/09 11:09:14  alian
-# Correction usage mkdir incorrect
-#
-# Revision 1.1  2002/02/24 09:55:20  alian
-# - Update to 1.1 release. With autoconf and last test, this release can be
-# see as first stable tested release.
-#
-# Revision 0.10  2002/02/24 09:53:32  alian
-# - Fix a bug in open that can cause segfault if file is not found
-# - Add include for autoconf file
-# - Update DEBUG syntax
 #
 # See file CHANGES for others update
 
@@ -41,6 +34,9 @@ use constant SMBC_DIR => 7;
 use constant SMBC_FILE => 8;
 use constant SMBC_LINK => 9;
 use constant MAX_LENGTH_LINE => 4096;
+use constant SMB_CTX_FLAG_USE_KERBEROS => (1 << 0);
+use constant SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS => (1 << 1);
+use constant SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON => (1 << 2);
 
 use vars qw($AUTOLOAD $VERSION @ISA @EXPORT);
 require Exporter;
@@ -54,8 +50,10 @@ my $DEBUG = 0;
 @ISA = qw(Exporter DynaLoader Tie::Handle);
 @EXPORT = qw(SMBC_DIR SMBC_WORKGROUP SMBC_SERVER SMBC_FILE_SHARE
 	     SMBC_PRINTER_SHARE SMBC_COMMS_SHARE SMBC_IPC_SHARE SMBC_FILE
-	     SMBC_LINK _write _open _close _read _lseek);
-$VERSION = ('$Revision: 1.5 $ ' =~ /(\d+\.\d+)/)[0];
+	     SMBC_LINK _write _open _close _read _lseek 
+	     SMB_CTX_FLAG_USE_KERBEROS SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS
+             SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON);
+$VERSION = ('$Revision: 3.1 $ ' =~ /(\d+\.\d+)/)[0];
 
 bootstrap Filesys::SmbClient $VERSION;
 
@@ -82,7 +80,7 @@ sub AUTOLOAD  {
   $attr =~ s/.*:://;
   return unless $attr =~ /[^A-Z]/;
   die "Method undef ->$attr()\n" unless defined($commandes{$attr});
-  return $commandes{$attr}->(@_);
+  return $commandes{$attr}->($self->{context}, @_);
 }
 
 #------------------------------------------------------------------------------
@@ -90,13 +88,12 @@ sub AUTOLOAD  {
 #------------------------------------------------------------------------------
 sub TIEHANDLE {
   require 5.005_64;
-  my ($class,$fn,$mode) = @_;
+  my ($class,$fn,$mode,@args) = @_;
   $mode = '0666' if (!$mode);
-  my $self = {}; 
-  bless $self, $class;
-  print "Filesys::SmbClient new\n" if ($DEBUG);
+  my $self = new($class, @args);
+  print "Filesys::SmbClient TIEHANDLE\n" if ($DEBUG);
   if ($fn) {
-    $self->{FD} = _open($fn,$mode) or return undef; }
+    $self->{FD} = _open($self->{context}, $fn, $mode) or return undef; }
   return $self;
 }
 
@@ -107,7 +104,7 @@ sub OPEN {
   my ($class,$fn,$mode) = @_;
   $mode = '0666' if (!$mode);
   print "OPEN\n"  if ($DEBUG);
-  $class->{FD} = _open($fn,$mode) or return undef;
+  $class->{FD} = _open($class->{context}, $fn, $mode) or return undef;
   $class;
 }
 
@@ -127,7 +124,7 @@ sub WRITE {
   print "Filesys::SmbClient WRITE\n"  if ($DEBUG);
   $buffer = substr($buffer,0,$length) if ($length);
   SEEK($self,$offset, SEEK_SET) if ($offset);
-  my $lg = _write($self->{FD}, $buffer, $length);
+  my $lg = _write($self->{context}, $self->{FD}, $buffer, $length);
   return ($lg == -1) ? undef : $lg;
 }
 
@@ -137,7 +134,7 @@ sub WRITE {
 sub SEEK {
   my ($self,$offset,$whence) = @_;
   print "Filesys::SmbClient SEEK\n"  if ($DEBUG);
-  return _lseek($self->{FD}, $offset, SEEK_SET);
+  return _lseek($self->{context}, $self->{FD}, $offset, $whence);
 }
 
 #------------------------------------------------------------------------------
@@ -148,7 +145,9 @@ sub READ {
   print "Filesys::SmbClient READ\n" if ($DEBUG);
   my $buf = \$_[0];
   my $lg = ($_[1] ? $_[1] : MAX_LENGTH_LINE);
-  $$buf = _read($self->{FD}, $lg) or return undef;
+  # 
+  defined($$buf = _read($self->{context}, $self->{FD}, $lg)) or return undef;
+#  $$buf = _read($self->{context}, $self->{FD}, $lg) or return undef;
   return length($$buf);
 }
 
@@ -169,9 +168,9 @@ sub READLINE {
   # Read while we haven't \n or eof
   my $part;
   READ($self,$part,MAX_LENGTH_LINE);
-  while ($part and $part!~m!\n!ms) {
+  while ($part and $part!~m!\n!ms and $self->{_FD}) {
     $buf.=$part;
-    $part = $self->read($self->{_FD},@_);
+    $part = $self->read($self->{_FD}, @_);
   }
   $buf.= $part if ($part);
   # eof
@@ -210,7 +209,7 @@ sub GETC {
 sub CLOSE {
   my $self = shift;
   print "Filesys::SmbClient CLOSE\n" if ($DEBUG);
-  _close($self->{FD});
+  _close($self->{context}, $self->{FD});
 }
 
 #------------------------------------------------------------------------------
@@ -232,8 +231,9 @@ sub new   {
   my $self = {};
   my @l; 
   bless $self, $class;
+  my %vars;
   if (@_) {
-    my %vars =@_;
+    %vars =@_;
     if (!$vars{'workgroup'}) { $vars{'workgroup'}=""; }
     if (!$vars{'username'})  { $vars{'username'}=""; }
     if (!$vars{'password'})  { $vars{'password'}=""; }
@@ -242,6 +242,7 @@ sub new   {
     push(@l, $vars{'password'});
     push(@l, $vars{'workgroup'});
     push(@l, $vars{'debug'});
+    print "Filesys::SmbClient new>",join(" ", @l),"\n" if $vars{'debug'};
     $self->{params}= \%vars;
   }
   else { @l =("","","",0); }
@@ -262,10 +263,20 @@ sub new   {
   }
   # End of temporary hack
 
-  my $ret = _init(@l);
+  $self->{context} = _init(@l);
+  $vars{'flags'} && _set_flags($self->{context}, $vars{'flags'});
   die 'You must have a samba configuration file '.
-    '($HOME/.smb/smb.conf , even if it is empty' if ($ret <0);
+    '($HOME/.smb/smb.conf , even if it is empty' unless $self->{context};
   return $self;
+}
+
+#------------------------------------------------------------------------------
+# set_flag
+#------------------------------------------------------------------------------
+sub set_flag {
+  my $self = shift;
+  my $flag = shift;
+  _set_flags($self->{context}, $flag);
 }
 
 
@@ -276,10 +287,12 @@ sub readdir_struct  {
   my $self=shift;
   if (wantarray()) {
     my @tab;
-    while (my @l  = _readdir($_[0])) { push(@tab,\@l); }
+    while (my @l  = _readdir($self->{context}, $_[0])) { push(@tab,\@l); }
     return @tab;
+  } else {
+    my @l = _readdir($self->{context}, $_[0]);
+    return \@l if (@l);
   }
-  else {my @l = _readdir($_[0]);return \@l if (@l);}
 }
 
 #------------------------------------------------------------------------------
@@ -289,10 +302,12 @@ sub readdir {
   my $self=shift;
   if (wantarray()) {
     my @tab;
-    while (my @l  = _readdir($_[0])) { push(@tab,$l[1]);}
+    while (my @l  = _readdir($self->{context}, $_[0])) { push(@tab,$l[1]);}
     return @tab;
+  } else {
+    my @l =_readdir($self->{context}, $_[0]);
+    return $l[1];
   }
-  else {my @l =_readdir($_[0]);return $l[1];}
 }
 
 #------------------------------------------------------------------------------
@@ -301,7 +316,7 @@ sub readdir {
 sub open  {
   my ($self,$file,$perms)=@_;
   $perms = '0666' if (!$perms);
-  $self->{_FD} = _open($file, $perms);
+  $self->{_FD} = _open($self->{context}, $file, $perms);
   print "Filesys::SmbClient open <$self->{_FD}>\n" 
     if ($self->{params}->{debug});
   return $self->{_FD};
@@ -317,18 +332,19 @@ sub seek {
   $whence = SEEK_SET if (!$whence);
   warn "Whence diff from SEEK_SET not implemented in smb"
     if ($whence ne SEEK_SET);
-  return _lseek($fd, $offset, SEEK_SET);
+  return _lseek($self->{context}, $fd, $offset, SEEK_SET);
 }
 
 #------------------------------------------------------------------------------
 # write
 #------------------------------------------------------------------------------
 sub write  {
-  my ($self,$fd)=@_;
-  shift; shift;
+  my $self = shift;
+  my $fd = shift;
+  print "Filesys::SmbClient write ".$self.' '.$fd.' '.join(" ",@_)."\n"
+    if ($self->{params}->{debug});
   my $buffer = join("",@_);
-  print "Filesys::SmbClient write $buffer\n"  if ($self->{params}->{debug});
-  return _write($fd, $buffer, length($buffer));
+  return _write($self->{context}, $fd, $buffer, length($buffer));
 }
 
 #------------------------------------------------------------------------------
@@ -337,7 +353,7 @@ sub write  {
 sub read  {
   my ($self,$fd,$lg)=@_;
   $lg = MAX_LENGTH_LINE if (!$lg);
-  return _read($fd, $lg);
+  return _read($self->{context}, $fd, $lg);
 }
 
 #------------------------------------------------------------------------------
@@ -346,7 +362,7 @@ sub read  {
 sub mkdir  {
   my ($self,$dir,$mode)=@_;
   $mode = '0755' if (!$mode);
-  return _mkdir($dir, $mode);
+  return _mkdir($self->{context}, $dir, $mode);
 }
 
 #------------------------------------------------------------------------------
@@ -401,14 +417,18 @@ See section EXAMPLE for others scripts.
 
 =head1 DESCRIPTION
 
-Provide interface to access routine defined in libsmbclient.so.
+Provide interface to access routine defined in libsmbclient.so provided with
+Samba.
 
-On 2001/08/05, this library is available on Samba source, but is not
-build by default. (release 2.2.1).
+Since 3.0 release of this package, you need a least samba-3.0.2.
+For prior release of Samba, use Filesys::SmbClient version 1.x.
+
+For old and 2.x release, this library is available on Samba source, but is not
+build by default.
 Do "make bin/libsmbclient.so" in sources directory of Samba to build 
-this libraries. Then copy source/include/libsmbclient.h
-and source/bin/libsmbclient.so where you need them before install this
-module.
+this libraries. Then copy source/include/libsmbclient.h to
+/usr/local/samba/include and source/bin/libsmbclient.so to
+/usr/local/samba/lib before install this module.
 
 If you want to use filehandle with this module, you need Perl 5.6 or later.
 
@@ -418,7 +438,7 @@ When a path is used, his scheme is :
 
 =head1 VERSION
 
-$Revision: 1.5 $
+$Revision: 3.1 $
 
 =head1 FONCTIONS
 
@@ -439,13 +459,17 @@ username
 
 password
 
-=item * 
+=item *
 
 workgroup
 
 =item *
 
 debug
+
+=item *
+
+flags : See set_flag
 
 =back
 
@@ -457,6 +481,22 @@ Example:
 				   password  => "speed", 
 				   workgroup => "alian",
 				   debug     => 10);
+
+
+=item set_flag
+
+Set flag for smb connection. See _SMBCCTX->flags in libsmclient.h
+Flag can be:
+
+=over
+
+=item SMB_CTX_FLAG_USE_KERBEROS
+
+=item SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS
+
+=item SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON
+
+=back
 
 =back
 

@@ -13,9 +13,19 @@ void set_fn(char *workgroup,
 	    char *username,
 	    char *password)
 {  
+#ifdef VERBOSE
+  printf("set_fn\n");
+#endif
+
   strcpy(User, username);
   strcpy(Password, password);
-  strcpy(Workgroup, workgroup);
+  /* set workgroup only when set */
+  if (workgroup[0] && workgroup[0] != 0) {
+#ifdef VERBOSE
+    fprintf("Workgroup is set to %s", workgroup);
+#endif
+    strcpy(Workgroup, workgroup);
+  }
 }
 
 /*-----------------------------------------------------------------------------
@@ -25,14 +35,32 @@ void auth_fn(const char *server,
 	     const char *share,
 	     char *workgroup, int wgmaxlen,
 	     char *username, int unmaxlen,
-	     char *password, int pwmaxlen)
-{
-  strcpy(workgroup, Workgroup);
-  wgmaxlen = 30;
+	     char *password, int pwmaxlen) {
+
+#ifdef VERBOSE
+  printf("auth_fn\n");
+#endif
+
+  /* set workgroup only when set */
+  if (Workgroup[0] && Workgroup[0] != 0) {
+#ifdef VERBOSE
+    fprintf("Workgroup is set to %s", Workgroup);
+#endif
+    strcpy(workgroup, Workgroup);
+    wgmaxlen = 30;
+  }
   strcpy(username, User);
   unmaxlen = 30;
   strcpy(password, Password);
   pwmaxlen = 30;
+
+#ifdef VERBOSE
+  fprintf(stdout, "username: [%s]\n", username);
+  fprintf(stdout, "password: [%s]\n", password);
+  fprintf(stdout, "workgroup: [%s]\n", workgroup);
+#endif
+
+
 }
 
 /*-----------------------------------------------------------------------------
