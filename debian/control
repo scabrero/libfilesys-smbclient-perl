@@ -3,7 +3,7 @@ Section: perl
 Priority: extra
 Build-Depends: debhelper (>= 6), perl (>= 5.8.0-7), libsmbclient-dev, quilt (>= 0.40)
 Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
-Uploaders: Gunnar Wolf <gwolf@debian.org>, Damyan Ivanov <dmn@debian.org>,
+Uploaders: Damyan Ivanov <dmn@debian.org>,
  gregor herrmann <gregoa@debian.org>
 Standards-Version: 3.7.3
 Homepage: http://search.cpan.org/dist/Filesys-SmbClient/
