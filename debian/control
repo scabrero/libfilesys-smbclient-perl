@@ -7,8 +7,8 @@ Uploaders: Damyan Ivanov <dmn@debian.org>,
  gregor herrmann <gregoa@debian.org>
 Standards-Version: 3.7.3
 Homepage: http://search.cpan.org/dist/Filesys-SmbClient/
-Vcs-Svn: svn://svn.debian.org/pkg-perl/trunk/libfilesys-smbclient-perl/
-Vcs-Browser: http://svn.debian.org/viewsvn/pkg-perl/trunk/libfilesys-smbclient-perl/
+Vcs-Git: git://git.debian.org/pkg-perl/packages/libfilesys-smbclient-perl.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libfilesys-smbclient-perl.git
 
 Package: libfilesys-smbclient-perl
 Architecture: any
