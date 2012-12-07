@@ -5,7 +5,7 @@ use Filesys::SmbClient;
 use strict;
 use diagnostics;
 
-plan tests=>18;
+plan tests=>19;
 
 my $loaded = 1;
 ok($loaded,"Load module");
@@ -14,7 +14,7 @@ my $buffer = "A test of write call\n";
 my $buffer2 = "buffer of 1234\n";
 
 SKIP: {
-  skip "No server defined for test at perl Makefile.PL", 17 if (!-e ".c");
+  skip "No server defined for test at perl Makefile.PL", 18 if (!-e ".c");
 if (-e ".c") {
   use POSIX;
   my $ok = 0;
@@ -27,7 +27,7 @@ if (-e ".c") {
      password  => $l[4],
      workgroup => $l[2],
      debug     =>  0,
-     flags     => SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON
+#     flags     => SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON
     );
   my $smb = new Filesys::SmbClient(%param);
   my $server = "smb://$l[0]/$l[1]";
@@ -121,5 +121,7 @@ if (-e ".c") {
   print "There is a .c file in this directory with info about your params \n",
         "for you SMB server test. Think to remove it if you have finish \n",
 	  "with test.\n\n";
+
+  ok( $smb->shutdown(0), "shutdown");
 }
 }

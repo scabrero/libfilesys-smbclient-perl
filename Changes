@@ -1,5 +1,8 @@
 Revision history for Perl extension Filesys::SmbClient.
 
+3.2  2012/12/04 acca@cpan.org
+ - Implements connection close with smbc_free_context
+
 3.1  2006/09/07 17:15:00 alian
  - fix rt#12221: compile error on Debian Sarge
  - fix rt#18757: compile error with Gentoo Linux/samba 3.0.21b

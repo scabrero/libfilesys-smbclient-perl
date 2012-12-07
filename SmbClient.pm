@@ -2,10 +2,13 @@ package Filesys::SmbClient;
  
 # module Filesys::SmbClient : provide function to access Samba filesystem
 # with libsmclient.so
-# Copyright 2000-2006 A.Barbet alian@alianwebserver.com.  All rights reserved.
+# Copyright 2000-2012 A.Barbet alian@cpan.org.  All rights reserved.
 
 # $Log: SmbClient.pm,v $
-# Revision 3.1  2006/09/13 13:49:32  alian
+# Revision 3.2  2012/12/04 14:49:32  alian
+#
+# release 3.2: implements connection close with smbc_free_context (acca@cpan.org)
+#
 # release 3.1: fix for rt#12221 rt#18757 rt#13173 and bug in configure
 #
 # Revision 3.0  2005/03/04 16:15:00  alian
@@ -53,7 +56,7 @@ my $DEBUG = 0;
 	     SMBC_LINK _write _open _close _read _lseek 
 	     SMB_CTX_FLAG_USE_KERBEROS SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS
              SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON);
-$VERSION = ('$Revision: 3.1 $ ' =~ /(\d+\.\d+)/)[0];
+$VERSION = ('$Revision: 3.2 $ ' =~ /(\d+\.\d+)/)[0];
 
 bootstrap Filesys::SmbClient $VERSION;
 
@@ -383,6 +386,13 @@ sub rmdir_recurse  {
   return $self->rmdir($url);
 }
 
+#------------------------------------------------------------------------------
+# shutdown
+#------------------------------------------------------------------------------
+sub shutdown  {
+  my ($self, $flag)=@_;
+  return _shutdown($self->{context}, $flag);
+}
 
 1;
 
@@ -438,7 +448,7 @@ When a path is used, his scheme is :
 
 =head1 VERSION
 
-$Revision: 3.1 $
+$Revision: 3.2 $
 
 =head1 FONCTIONS
 
@@ -793,6 +803,22 @@ Close file FILEHANDLE. Return 0 on success, else -1 is return and
 errno and $! is set.
 
 =back
+
+=item shutdown flag
+
+A wrapper around `libsmbclient's `smbc_free_context'.
+
+Close open files, release Samba connection, delete context,
+aquired during open_* calls.
+
+Example:
+
+    $smb->shutdown(0); # Gracefully close connection
+    $sbm->shutdown(1); # Forcibly close files and connection
+
+NOTE:
+    shutdown(1) may cause complaints about talloc memory
+    leaks, if there are currently no open files.
 
 =head2 Print method
 
