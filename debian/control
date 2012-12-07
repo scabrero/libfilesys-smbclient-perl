@@ -1,14 +1,14 @@
 Source: libfilesys-smbclient-perl
 Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Uploaders: Damyan Ivanov <dmn@debian.org>,
-           gregor herrmann <gregoa@debian.org>
+           gregor herrmann <gregoa@debian.org>,
+           Xavier Guimard <x.guimard@free.fr>
 Section: perl
 Priority: extra
-Build-Depends: debhelper (>= 6),
-               perl,
+Build-Depends: debhelper (>= 8),
                libsmbclient-dev,
-               quilt
-Standards-Version: 3.7.3
+               perl
+Standards-Version: 3.9.4
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libfilesys-smbclient-perl.git
 Vcs-Git: git://git.debian.org/pkg-perl/packages/libfilesys-smbclient-perl.git
 Homepage: http://search.cpan.org/dist/Filesys-SmbClient/
