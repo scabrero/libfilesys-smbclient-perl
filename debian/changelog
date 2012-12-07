@@ -22,6 +22,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Update debian/copyright (years and format)
   * Update debian/rules to use "dh %"
   * Add override_dh_auto_clean to clean temporary files
+  * Add description in 10_Makefile.PL.patch
 
  -- Xavier Guimard <x.guimard@free.fr>  Fri, 07 Dec 2012 21:25:07 +0100
 
