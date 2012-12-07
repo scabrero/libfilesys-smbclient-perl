@@ -19,6 +19,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Update source format to 3.0 (quilt)
   * Bump Standards-Version to 3.9.4
   * Use debhelper 8
+  * Update debian/copyright (years and format)
 
  -- Xavier Guimard <x.guimard@free.fr>  Fri, 07 Dec 2012 21:25:07 +0100
 
