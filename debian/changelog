@@ -1,4 +1,4 @@
-libfilesys-smbclient-perl (3.1-4) UNRELEASED; urgency=low
+libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
 
   [ gregor herrmann ]
   * Add debian/README.source to document quilt usage, as required by
@@ -16,7 +16,11 @@ libfilesys-smbclient-perl (3.1-4) UNRELEASED; urgency=low
   [ gregor herrmann ]
   * debian/control: update {versioned,alternative} (build) dependencies.
 
- -- gregor herrmann <gregoa@debian.org>  Wed, 06 Aug 2008 21:33:39 -0300
+  [ Xavier Guimard ]
+  * Imported Upstream version 3.2
+  * Update source format to 3.0 (quilt)
+
+ -- Xavier Guimard <x.guimard@free.fr>  Fri, 07 Dec 2012 21:25:07 +0100
 
 libfilesys-smbclient-perl (3.1-3) unstable; urgency=low
 
