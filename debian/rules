@@ -2,3 +2,7 @@
 
 %:
 	dh $@
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -f config.h config.log config.status

@@ -21,6 +21,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Use debhelper 9.20120312
   * Update debian/copyright (years and format)
   * Update debian/rules to use "dh %"
+  * Add override_dh_auto_clean to clean temporary files
 
  -- Xavier Guimard <x.guimard@free.fr>  Fri, 07 Dec 2012 21:25:07 +0100
 
