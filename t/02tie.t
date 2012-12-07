@@ -23,7 +23,7 @@ my $buffer = "A test of write call\n";
 my $buffer2 = "buffer of 1234\n";
 
 SKIP: {
-  skip "No server defined for test at perl Makefile.PL", 20 if (!-e ".c");
+  skip "No server defined for test at perl Makefile.PL", 25 if (!-e ".c");
   my $ok = 0;
   my (%param,$server);
   if (open(F,".c")) {

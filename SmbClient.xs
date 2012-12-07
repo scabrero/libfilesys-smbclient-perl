@@ -40,23 +40,35 @@ CODE:
  */	
 SMBCCTX *context;
 context = smbc_new_context();
-context->debug = 0; //4 gives a good level of trace.
+if (!context) {
+  XSRETURN_UNDEF;
+}
+smbc_setDebug(context, 4); //4 gives a good level of trace.
 set_fn(workgroup, user, password);
-context->callbacks.auth_fn=auth_fn;
-context->debug = debug;
+smbc_setFunctionAuthData(context, auth_fn);
+smbc_setDebug(context, debug);
 if (smbc_init_context(context) == 0) {
   smbc_free_context(context, 1); 
-  RETVAL=0;
-} else {
-  RETVAL = context; 
-}
+  XSRETURN_UNDEF;
+} 
+RETVAL = context; 
 #ifdef VERBOSE
   fprintf(stderr, "! Filesys::SmbClient : "
-	          "init %d context\n", context); 
+	          "init %p context\n", context); 
 #endif
 OUTPUT:
   RETVAL
 
+
+int
+_shutdown( context, flag)
+    SMBCCTX * context
+    int flag
+CODE:
+    smbc_free_context(context, flag);
+    RETVAL = 1;
+OUTPUT:
+    RETVAL
 
 int
 _set_flags(context, flag)

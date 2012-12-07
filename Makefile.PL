@@ -96,7 +96,7 @@ sub try_to_find {
 }
 
 sub find_path {
-  my $ext = ($_[0]=~m!\.h$! ? "include" : "lib");
+  my $ext = ($_[0]=~m!\.h$! ? "include" : ( $ENV{HOSTTYPE}=~m!x86_64! ? "lib64" : "lib"));
   my $defaultsDir = { "/usr" => 1,
 		      "/usr/local" => 1,
 		      "/usr/local/samba" => 1,
