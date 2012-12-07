@@ -5,7 +5,7 @@ Uploaders: Damyan Ivanov <dmn@debian.org>,
            Xavier Guimard <x.guimard@free.fr>
 Section: perl
 Priority: extra
-Build-Depends: debhelper (>= 8),
+Build-Depends: debhelper (>= 9.20120312),
                libsmbclient-dev,
                perl
 Standards-Version: 3.9.4
