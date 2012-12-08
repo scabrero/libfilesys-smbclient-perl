@@ -1,0 +1,26 @@
+Description: Spelling error in pod
+Author: Xavier Guimard <x.guimard@free.fr>
+Bug: https://rt.cpan.org/Ticket/Display.html?id=81794
+Forwarded: https://rt.cpan.org/Ticket/Display.html?id=81794
+Last-Update: 2012-12-07
+
+--- libfilesys-smbclient-perl-3.2.orig/SmbClient.pm
++++ libfilesys-smbclient-perl-3.2/SmbClient.pm
+@@ -762,7 +762,7 @@ Example:
+ 
+ =item read FILEHANDLE, LENGTH
+ 
+-Read $count bytes of data on file descriptor $fd. It lenght is not set,
++Read $count bytes of data on file descriptor $fd. It length is not set,
+ 4096 bytes will be read.
+ 
+ Return buffer read on success, undef at end of file,
+@@ -809,7 +809,7 @@ errno and $! is set.
+ A wrapper around `libsmbclient's `smbc_free_context'.
+ 
+ Close open files, release Samba connection, delete context,
+-aquired during open_* calls.
++acquired during open_* calls.
+ 
+ Example:
+ 
