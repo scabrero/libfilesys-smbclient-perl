@@ -1,1 +1,3 @@
 10_Makefile.PL.patch
+spelling-error-in-pod.patch
+pod-error.patch

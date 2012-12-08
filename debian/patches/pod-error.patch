@@ -1,0 +1,26 @@
+Description: Pod error
+Author: Xavier Guimard <x.guimard@free.fr>
+Bug: https://rt.cpan.org/Ticket/Display.html?id=81794
+Forwarded: https://rt.cpan.org/Ticket/Display.html?id=81794
+Last-Update: 2012-12-08
+
+--- libfilesys-smbclient-perl-3.2.orig/SmbClient.pm
++++ libfilesys-smbclient-perl-3.2/SmbClient.pm
+@@ -802,8 +802,6 @@ FILEHANDLE must be open with open of thi
+ Close file FILEHANDLE. Return 0 on success, else -1 is return and
+ errno and $! is set.
+ 
+-=back
+-
+ =item shutdown flag
+ 
+ A wrapper around `libsmbclient's `smbc_free_context'.
+@@ -820,6 +818,8 @@ NOTE:
+     shutdown(1) may cause complaints about talloc memory
+     leaks, if there are currently no open files.
+ 
++=back
++
+ =head2 Print method
+ 
+ =over
