@@ -1,7 +1,6 @@
 libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
 
   TODO:
-  - update changelog (i.e. remove overrides [minus fixperms], lintian)
   - d/copyright: according to SmbClient.pm, the License is "same as perl",
     i.e. Artistic | GPL-1+
 
@@ -26,14 +25,8 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Update debian/rules to use "dh %"
   * Add description in 10_Makefile.PL.patch
   * Add spelling and pod patch
-  * Add overrides :
-    - override_dh_auto_configure to force the use of Makefile.PL instead of
-      configure (else Makefile is not built)
-    - override_dh_auto_build because standards flags are not used by this
-      Makefile (for hardening)
-    - override_dh_fixperms to change example files mode
-    - override_dh_auto_clean to clean temporary files
-  * Add lintian-overrides to remove hardening warning
+  * Force the use of perl_makemaker in dh
+  * override_dh_fixperms to change example files mode
 
  -- Xavier Guimard <x.guimard@free.fr>  Sat, 08 Dec 2012 09:50:04 +0100
 
