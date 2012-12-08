@@ -1,4 +1,9 @@
-libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
+libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
+
+  TODO:
+  - update changelog (i.e. remove overrides [minus fixperms], lintian)
+  - d/copyright: according to SmbClient.pm, the License is "same as perl",
+    i.e. Artistic | GPL-1+
 
   [ gregor herrmann ]
   * debian/control: Added: ${misc:Depends} to Depends: field.
