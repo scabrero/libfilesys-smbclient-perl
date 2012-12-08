@@ -1,14 +1,24 @@
 #!/usr/bin/make -f
 
 PERL   ?= /usr/bin/perl
+PACKAGE = $(shell dh_listpackages)
+TMP     = $(CURDIR)/debian/$(PACKAGE)
 
 %:
 	dh $@
 
 override_dh_auto_clean:
+	$(MAKE) distclean || true
 	dh_auto_clean
-	rm -f config.h config.log config.status
 
 override_dh_auto_configure:
 	$(PERL) Makefile.PL INSTALLDIRS=vendor
+
+override_dh_auto_build:
+	$(MAKE) CCCDLFLAGS="$(CFLAGS) $(CCFLAGS) -fPIC" \
+		OTHERLDFLAGS="$(LDFLAGS)"
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 644 $(TMP)/usr/share/doc/libfilesys-smbclient-perl/examples/smb2www.css
 

@@ -1,0 +1,1 @@
+libfilesys-smbclient-perl: hardening-no-fortify-functions usr/lib/perl5/auto/Filesys/SmbClient/SmbClient.so
