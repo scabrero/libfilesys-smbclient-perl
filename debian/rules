@@ -1,22 +1,10 @@
 #!/usr/bin/make -f
 
-PERL   ?= /usr/bin/perl
 PACKAGE = $(shell dh_listpackages)
 TMP     = $(CURDIR)/debian/$(PACKAGE)
 
 %:
-	dh $@
-
-override_dh_auto_clean:
-	$(MAKE) distclean || true
-	dh_auto_clean
-
-override_dh_auto_configure:
-	$(PERL) Makefile.PL INSTALLDIRS=vendor
-
-override_dh_auto_build:
-	$(MAKE) CCCDLFLAGS="$(CFLAGS) $(CCFLAGS) -fPIC" \
-		OTHERLDFLAGS="$(LDFLAGS)"
+	dh $@ --buildsystem=perl_makemaker
 
 override_dh_fixperms:
 	dh_fixperms
