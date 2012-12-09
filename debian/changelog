@@ -3,6 +3,10 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   TODO:
   - d/copyright: according to SmbClient.pm, the License is "same as perl",
     i.e. Artistic | GPL-1+
+    => Since COPYING points to GPL-2+ and POD to "same as Perl", I've reported
+       a bug: https://rt.cpan.org/Ticket/Display.html?id=81835
+    => I've reported the problem to #debian-release, some of them said that
+       "Files: *" has to point to GPL-2+ and Smbclient.pm to "same as Perl"
 
   [ gregor herrmann ]
   * debian/control: Added: ${misc:Depends} to Depends: field.
