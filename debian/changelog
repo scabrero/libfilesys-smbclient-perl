@@ -26,7 +26,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Bump Standards-Version to 3.9.4
   * Use debhelper 9.20120312
   * Update debian/copyright (years and format)
-  * Update debian/rules to use "dh %"
+  * Update debian/rules to use "dh $@"
   * Add description in 10_Makefile.PL.patch
   * Add spelling and pod patch
   * Force the use of perl_makemaker in dh
