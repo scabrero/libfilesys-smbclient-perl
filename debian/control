@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9.20120312),
                perl
 Standards-Version: 3.9.4
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libfilesys-smbclient-perl.git
-Vcs-Git: git://git.debian.org/pkg-perl/packages/libfilesys-smbclient-perl.git
+Vcs-Git: git://anonscm.debian.org/pkg-perl/packages/libfilesys-smbclient-perl.git
 Homepage: http://search.cpan.org/dist/Filesys-SmbClient/
 
 Package: libfilesys-smbclient-perl
