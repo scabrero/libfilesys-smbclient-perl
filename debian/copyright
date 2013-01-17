@@ -6,6 +6,9 @@ Upstream-Contact: Alain BARBET <alian@cpan.org>
 Files: *
 Copyright: 2000-2012, Alain Barbet <alian@cpan.org>
 License: Artistic or GPL-1+
+Comment: According to the mail archived here:
+ https://lists.debian.org/debian-perl/2013/01/msg00012.html, the license
+ is fixed to Artistic or GPL-1+
 
 Files: configure
 Copyright: 1992-2002, Free Software Foundation, Inc.
