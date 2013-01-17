@@ -1,12 +1,4 @@
-libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
-
-  TODO:
-  - d/copyright: according to SmbClient.pm, the License is "same as perl",
-    i.e. Artistic | GPL-1+
-    => Since COPYING points to GPL-2+ and POD to "same as Perl", I've reported
-       a bug: https://rt.cpan.org/Ticket/Display.html?id=81835
-    => I've reported the problem to #debian-release, some of them said that
-       "Files: *" has to point to GPL-2+ and Smbclient.pm to "same as Perl"
+libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
 
   [ gregor herrmann ]
   * debian/control: Added: ${misc:Depends} to Depends: field.
@@ -26,6 +18,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   * Bump Standards-Version to 3.9.4
   * Use debhelper 9.20120312
   * Update debian/copyright (years and format)
+  * Fix upstream license to Artistic or GPL-1+
   * Update debian/rules to use "dh $@"
   * Add description in 10_Makefile.PL.patch
   * Add spelling and pod patch
@@ -35,7 +28,7 @@ libfilesys-smbclient-perl (3.2-1) UNRELEASED; urgency=low
   [ Salvatore Bonaccorso ]
   * Change Vcs-Git to canonical URI (git://anonscm.debian.org)
 
- -- Xavier Guimard <x.guimard@free.fr>  Sat, 08 Dec 2012 09:50:04 +0100
+ -- Xavier Guimard <x.guimard@free.fr>  Thu, 17 Jan 2013 06:17:42 +0100
 
 libfilesys-smbclient-perl (3.1-3) unstable; urgency=low
 
