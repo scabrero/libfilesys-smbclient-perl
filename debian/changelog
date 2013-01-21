@@ -2,15 +2,13 @@ libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
 
   [ gregor herrmann ]
   * debian/control: Added: ${misc:Depends} to Depends: field.
+  * debian/control: update {versioned,alternative} (build) dependencies.
 
   [ Nathan Handler ]
   * debian/watch: Update to ignore development releases.
 
   [ Ansgar Burchardt ]
   * debian/control: Convert Vcs-* fields to Git.
-
-  [ gregor herrmann ]
-  * debian/control: update {versioned,alternative} (build) dependencies.
 
   [ Xavier Guimard ]
   * Imported Upstream version 3.2
@@ -24,9 +22,6 @@ libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
   * Add spelling and pod patch
   * Force the use of perl_makemaker in dh
   * override_dh_fixperms to change example files mode
-
-  [ Salvatore Bonaccorso ]
-  * Change Vcs-Git to canonical URI (git://anonscm.debian.org)
 
  -- Xavier Guimard <x.guimard@free.fr>  Thu, 17 Jan 2013 06:17:42 +0100
 
