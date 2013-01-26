@@ -1,2 +1,2 @@
 version=3
-http://search.cpan.org/dist/Filesys-SmbClient/   .+/Filesys-SmbClient-v?(\d[\d.]*)\.(?:tar\.gz|tar\.bz2|tgz|tbz|zip)
+https://metacpan.org/release/Filesys-SmbClient/   .+/Filesys-SmbClient-v?(\d[\d.]*)\.(?:tar\.gz|tar\.bz2|tgz|tbz|zip)

@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Filesys-SmbClient
-Source: http://search.cpan.org/dist/Filesys-SmbClient/
+Source: https://metacpan.org/release/Filesys-SmbClient/
 Upstream-Contact: Alain BARBET <alian@cpan.org>
 
 Files: *
