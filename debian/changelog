@@ -1,3 +1,9 @@
+libfilesys-smbclient-perl (3.2-2) UNRELEASED; urgency=low
+
+  * Change search.cpan.org based URIs to metacpan.org based URIs
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sat, 26 Jan 2013 16:04:31 +0100
+
 libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
 
   [ gregor herrmann ]
