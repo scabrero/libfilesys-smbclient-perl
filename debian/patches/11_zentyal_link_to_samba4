@@ -1,0 +1,29 @@
+Index: libfilesys-smbclient-perl/Makefile.PL
+===================================================================
+--- libfilesys-smbclient-perl.orig/Makefile.PL	2013-07-17 13:49:00.483412295 +0200
++++ libfilesys-smbclient-perl/Makefile.PL	2013-07-17 13:49:59.359413178 +0200
+@@ -9,13 +9,13 @@
+ #my $include = try_to_find("libsmbclient.h");
+ #$include = prompt("Where can I find libsmbclient.h ?", $include);
+ #warn_user("$include/libsmbclient.h") if (!-r "$include/libsmbclient.h");
+-my $include = '/usr/include';
++my $include = '/opt/samba4/include';
+ 
+ # path libsmbclient.so
+ #my $lib = try_to_find("libsmbclient.so");
+ #$lib = prompt("Where can I find libsmbclient.so ?",$lib);
+ #warn_user("libsmbclient.so") if (!-r "$lib/libsmbclient.so");
+-my $lib = '/usr/lib';
++my $lib = '/opt/samba4/lib';
+ 
+ # tests demande ?
+ #my $ans =
+@@ -42,7 +42,7 @@
+ if ($ans =~ /^y(es)?$/i) { $define = "-DVERBOSE"; }
+ 
+ # Create config.h for alloca via configure
+-my $prefix = $include;
++my $prefix = '/opt/samba4';
+ $prefix=$1 = $1 if $include=~m!(.*)include$!;
+ system("./configure --with-samba-prefix=$prefix") == 0
+   or die "Can't run configure:$!\n";
