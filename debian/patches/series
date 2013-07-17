@@ -2,3 +2,4 @@
 spelling-error-in-pod.patch
 pod-error.patch
 11_zentyal_link_to_samba4
+12_zentyal_use_new_smbclient_interface

@@ -5,8 +5,9 @@ libfilesys-smbclient-perl (3.2-2+zentyal1) UNRELEASED; urgency=low
 
   [ Samuel Cabrero ]
   * Link to samba4 libraries
+  * Move to new libsmbclient interface
 
- -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 17 Jul 2013 13:55:35 +0200
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 17 Jul 2013 20:03:54 +0200
 
 libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
 
