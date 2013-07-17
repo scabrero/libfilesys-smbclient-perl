@@ -1,0 +1,171 @@
+Index: libfilesys-smbclient-perl/SmbClient.pm
+===================================================================
+--- libfilesys-smbclient-perl.orig/SmbClient.pm	2013-07-17 19:48:33.811736005 +0200
++++ libfilesys-smbclient-perl/SmbClient.pm	2013-07-17 19:54:06.627740999 +0200
+@@ -41,6 +41,16 @@
+ use constant SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS => (1 << 1);
+ use constant SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON => (1 << 2);
+ 
++use constant SMBC_XATTR_FLAG_CREATE     => (0x1);
++use constant SMBC_XATTR_FLAG_REPLACE    => (0x2);
++
++use constant SMBC_DOS_MODE_READONLY  =>  0x01;
++use constant SMBC_DOS_MODE_HIDDEN    =>  0x02;
++use constant SMBC_DOS_MODE_SYSTEM    =>  0x04;
++use constant SMBC_DOS_MODE_VOLUME_ID =>  0x08;
++use constant SMBC_DOS_MODE_DIRECTORY =>  0x10;
++use constant SMBC_DOS_MODE_ARCHIVE   =>  0x20;
++
+ use vars qw($AUTOLOAD $VERSION @ISA @EXPORT);
+ require Exporter;
+ require DynaLoader;
+@@ -55,7 +65,12 @@
+ 	     SMBC_PRINTER_SHARE SMBC_COMMS_SHARE SMBC_IPC_SHARE SMBC_FILE
+ 	     SMBC_LINK _write _open _close _read _lseek 
+ 	     SMB_CTX_FLAG_USE_KERBEROS SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS
+-             SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON);
++         SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON
++         SMBC_XATTR_FLAG_CREATE SMBC_XATTR_FLAG_REPLACE
++         SMBC_DOS_MODE_READONLY SMBC_DOS_MODE_HIDDEN
++         SMBC_DOS_MODE_SYSTEM SMBC_DOS_MODE_VOLUME_ID
++         SMBC_DOS_MODE_DIRECTOY SMBC_DOS_MODE_ARCHIVE);
++
+ $VERSION = ('$Revision: 3.2 $ ' =~ /(\d+\.\d+)/)[0];
+ 
+ bootstrap Filesys::SmbClient $VERSION;
+@@ -72,6 +87,8 @@
+    "rmdir"            => \&_rmdir,
+    "unlink"           => \&_unlink,
+    "unlink_print_job" => \&_unlink_print_job,
++   "list_xattr"       => \&_list_xattr,
++   "get_xattr"        => \&_get_xattr,
+   );
+ 
+ #------------------------------------------------------------------------------
+@@ -394,6 +411,17 @@
+   return _shutdown($self->{context}, $flag);
+ }
+ 
++#------------------------------------------------------------------------------
++# set_xattr
++#------------------------------------------------------------------------------
++sub set_xattr {
++    my ($self, $url, $name, $value, $flags) = @_;
++
++    $flags = defined $flags ? $flags : 0;
++    return _set_xattr($self->{context}, $url, $name, $value,
++        length($value), $flags);
++}
++
+ 1;
+ 
+ __END__
+Index: libfilesys-smbclient-perl/SmbClient.xs
+===================================================================
+--- libfilesys-smbclient-perl.orig/SmbClient.xs	2013-07-17 19:51:15.659738433 +0200
++++ libfilesys-smbclient-perl/SmbClient.xs	2013-07-17 19:55:38.507742377 +0200
+@@ -565,4 +565,104 @@
+ OUTPUT:
+   RETVAL
+ 
++SV *
++_list_xattr(context, url)
++    SMBCCTX *context
++    char *url
++INIT:
++    AV *result = (AV *)sv_2mortal((SV *)newAV());
++    smbc_listxattr_fn listxattr_fn = smbc_getFunctionListxattr(context);
++CODE:
++    int size = 0;
++    int ret = 0;
++    char *buffer = NULL;
+ 
++    ret = listxattr_fn(context, url, buffer, 0);
++    if (ret < 0) {
++#ifdef VERBOSE
++        fprintf(stderr, "*** Error Filesys::SmbClient: "
++                        "list_xattr: %s (errno %d)\n", strerror(errno), errno);
++#endif
++        XSRETURN_UNDEF;
++    } else {
++        size = ret;
++    }
++
++    buffer = (char *)alloca(size+1);
++    ret = listxattr_fn(context, url, buffer, size+1);
++    if (ret < 0) {
++#ifdef VERBOSE
++        fprintf(stderr, "*** Error Filesys::SmbClient: "
++                        "list_xattr: %s (errno %d)\n", strerror(errno), errno);
++#endif
++        XSRETURN_UNDEF;
++    }
++
++    char *pch = buffer;
++    while (pch < buffer + size) {
++        int len = strlen(pch);
++        if (len > 0) {
++            SV *val = newSVpvn(pch, len);
++            av_push(result, val);
++        }
++        pch += (len + 1);
++    }
++
++    RETVAL = newRV((SV *)result);
++OUTPUT:
++    RETVAL
++
++
++SV *
++_get_xattr(context, url, name)
++    SMBCCTX *context
++    char *url
++    char *name
++INIT:
++    smbc_getxattr_fn getxattr_fn = smbc_getFunctionGetxattr(context);
++CODE:
++    int size = 0;
++    int ret = 0;
++    char *buffer = NULL;
++
++    ret = getxattr_fn(context, url, name, buffer, 0);
++    if (ret < 0) {
++#ifdef VERBOSE
++        fprintf(stderr, "*** Error Filesys::SmbClient: "
++                        "get_xattr: %s (errno %d)\n", strerror(errno), errno);
++#endif
++        XSRETURN_UNDEF;
++    } else {
++        size = ret;
++    }
++
++    buffer = (char *)alloca(size+1);
++    ret = getxattr_fn(context, url, name, buffer, size+1);
++    if (ret < 0) {
++#ifdef VERBOSE
++        fprintf(stderr, "*** Error Filesys::SmbClient: "
++                        "get_xattr: %s (errno %d)\n", strerror(errno), errno);
++#endif
++        XSRETURN_UNDEF;
++    }
++
++    RETVAL = newSVpv(buffer, 0);
++OUTPUT:
++    RETVAL
++
++
++int
++_set_xattr(context, url, name, value, size, flags)
++    SMBCCTX *context
++    char *url
++    char *name
++    char *value
++    size_t size
++    int flags
++INIT:
++    smbc_setxattr_fn setxattr_fn = smbc_getFunctionSetxattr(context);
++CODE:
++    RETVAL = setxattr_fn(context, url, name, value, size, flags);
++    RETVAL = 1;
++OUTPUT:
++    RETVAL

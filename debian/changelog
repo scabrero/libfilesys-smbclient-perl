@@ -1,4 +1,4 @@
-libfilesys-smbclient-perl (3.2-2+zentyal1) UNRELEASED; urgency=low
+libfilesys-smbclient-perl (3.2-2+zentyal1) precise; urgency=low
 
   [ Salvatore Bonaccorso ]
   * Change search.cpan.org based URIs to metacpan.org based URIs
@@ -6,8 +6,9 @@ libfilesys-smbclient-perl (3.2-2+zentyal1) UNRELEASED; urgency=low
   [ Samuel Cabrero ]
   * Link to samba4 libraries
   * Move to new libsmbclient interface
+  * Support xattr functions
 
- -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 17 Jul 2013 20:03:54 +0200
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 17 Jul 2013 20:05:50 +0200
 
 libfilesys-smbclient-perl (3.2-1) unstable; urgency=low
 
