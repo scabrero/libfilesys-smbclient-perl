@@ -1,3 +1,10 @@
+libfilesys-smbclient-perl (3.2-2+zentyal2) precise; urgency=low
+
+  * Fix segfault in _open due to missing arguments on fprintf
+  * Fix return value on _set_xattr
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 17 Jul 2013 20:05:50 +0200
+
 libfilesys-smbclient-perl (3.2-2+zentyal1) precise; urgency=low
 
   [ Salvatore Bonaccorso ]

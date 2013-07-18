@@ -1,7 +1,7 @@
 Index: libfilesys-smbclient-perl/SmbClient.xs
 ===================================================================
---- libfilesys-smbclient-perl.orig/SmbClient.xs	2013-07-17 19:19:25.000000000 +0200
-+++ libfilesys-smbclient-perl/SmbClient.xs	2013-07-17 19:41:35.651729730 +0200
+--- libfilesys-smbclient-perl.orig/SmbClient.xs	2013-07-18 16:48:38.627090746 +0200
++++ libfilesys-smbclient-perl/SmbClient.xs	2013-07-18 17:01:53.594949967 +0200
 @@ -21,8 +21,8 @@
  #include "libauthSamba.h"
  #include "config.h"
@@ -269,7 +269,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  #endif
  } else {
    RETVAL = 1;
-@@ -322,43 +352,46 @@
+@@ -322,43 +352,54 @@
    char *fname
    int mode
  PREINIT:
@@ -298,20 +298,28 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  #ifdef VERBOSE
  fprintf(stderr, "! Filesys::SmbClient :"
 -	        "Open append %s : %s\n", fname); 
-+	        "Open append %s : %s\n", fname);
++	        "Open mode create append %s\n", fname);
  #endif
    /* Mode > */
    } else if ( (*fname != '\0') && (*fname == '>')) {
 -    flags = O_WRONLY | O_CREAT | O_TRUNC; fname++; 
 +    flags = O_WRONLY | O_CREAT | O_TRUNC; fname++;
++#ifdef VERBOSE
++fprintf(stderr, "! Filesys::SmbClient :"
++	        "Open mode create trunk %s\n", fname);
++#endif
    /* Mode < */
    } else if ( (*fname != '\0') && (*fname == '<')) {
 -    flags = O_RDONLY; fname++; 
 +    flags = O_RDONLY; fname++;
++#ifdef VERBOSE
++fprintf(stderr, "! Filesys::SmbClient :"
++	        "Open mode read only %s\n", fname);
++#endif
    /* Mod < */
    } else flags =  O_RDONLY;
 -RETVAL = context->open(context, fname, flags, mode);	
-+RETVAL = open_fn(context, fname, flags, mode);
++  RETVAL = open_fn(context, fname, flags, mode);
  #ifdef VERBOSE
    fprintf(stderr, "! Filesys::SmbClient :"
 -	          "Open %s return %d\n", fname, RETVAL); 
@@ -330,7 +338,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  OUTPUT:
    RETVAL
  
-@@ -369,20 +402,22 @@
+@@ -369,20 +410,22 @@
    SMBCFILE *fd
    int count
  PREINIT:
@@ -357,7 +365,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  }
  #endif
    if (returnValue<0) {RETVAL=&PL_sv_undef;}
-@@ -396,49 +431,53 @@
+@@ -396,49 +439,53 @@
    SMBCFILE *fd
    char *buf
    int count
@@ -426,7 +434,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  }
  #endif
  OUTPUT:
-@@ -449,16 +488,14 @@
+@@ -449,16 +496,14 @@
  _close(context, fd)
    SMBCCTX *context
    SMBCFILE *fd
@@ -447,7 +455,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  OUTPUT:
    RETVAL
  
-@@ -468,17 +505,19 @@
+@@ -468,17 +513,19 @@
  _unlink(context, fname)
    SMBCCTX *context
    char *fname
@@ -473,7 +481,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
  #endif
    } else RETVAL = 1;
  OUTPUT:
-@@ -491,7 +530,7 @@
+@@ -491,7 +538,7 @@
    char *purl
    int id
  CODE:
@@ -482,7 +490,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
   * Remove job print no id on printer purl
   *
   */
-@@ -499,7 +538,7 @@
+@@ -499,7 +546,7 @@
  #ifdef VERBOSE
    if (RETVAL<0)
      fprintf(stderr, "*** Error Filesys::SmbClient: "
@@ -491,7 +499,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
                      id, purl, strerror(errno), errno);
  #endif
  OUTPUT:
-@@ -512,7 +551,7 @@
+@@ -512,7 +559,7 @@
    char *purl
    char *printer
  CODE:
@@ -500,7 +508,7 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
   * Print url purl on printer purl
   *
   */
-@@ -520,7 +559,7 @@
+@@ -520,7 +567,7 @@
  #ifdef VERBOSE
    if (RETVAL<0)
      fprintf(stderr, "*** Error Filesys::SmbClient *** "

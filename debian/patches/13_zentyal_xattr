@@ -1,7 +1,7 @@
 Index: libfilesys-smbclient-perl/SmbClient.pm
 ===================================================================
---- libfilesys-smbclient-perl.orig/SmbClient.pm	2013-07-17 19:48:33.811736005 +0200
-+++ libfilesys-smbclient-perl/SmbClient.pm	2013-07-17 19:54:06.627740999 +0200
+--- libfilesys-smbclient-perl.orig/SmbClient.pm	2013-07-18 17:03:57.638522602 +0200
++++ libfilesys-smbclient-perl/SmbClient.pm	2013-07-18 17:03:59.762515944 +0200
 @@ -41,6 +41,16 @@
  use constant SMB_CTX_FLAG_FALLBACK_AFTER_KERBEROS => (1 << 1);
  use constant SMBCCTX_FLAG_NO_AUTO_ANONYMOUS_LOGON => (1 << 2);
@@ -62,9 +62,9 @@ Index: libfilesys-smbclient-perl/SmbClient.pm
  __END__
 Index: libfilesys-smbclient-perl/SmbClient.xs
 ===================================================================
---- libfilesys-smbclient-perl.orig/SmbClient.xs	2013-07-17 19:51:15.659738433 +0200
-+++ libfilesys-smbclient-perl/SmbClient.xs	2013-07-17 19:55:38.507742377 +0200
-@@ -565,4 +565,104 @@
+--- libfilesys-smbclient-perl.orig/SmbClient.xs	2013-07-18 17:03:57.638522602 +0200
++++ libfilesys-smbclient-perl/SmbClient.xs	2013-07-18 17:04:08.498488316 +0200
+@@ -573,4 +573,103 @@
  OUTPUT:
    RETVAL
  
@@ -166,6 +166,5 @@ Index: libfilesys-smbclient-perl/SmbClient.xs
 +    smbc_setxattr_fn setxattr_fn = smbc_getFunctionSetxattr(context);
 +CODE:
 +    RETVAL = setxattr_fn(context, url, name, value, size, flags);
-+    RETVAL = 1;
 +OUTPUT:
 +    RETVAL
